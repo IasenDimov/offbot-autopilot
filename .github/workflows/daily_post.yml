@@ -1,0 +1,28 @@
+name: OffBot Daily Pinterest Post
+
+on:
+  schedule:
+    - cron: '0 10 * * *' # Изпълнява се автоматично всеки ден в 10:00 сутринта
+  workflow_dispatch: # Позволява ти да го стартираш ръчно за тест
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Pinterest Bot
+        env:
+          PINTEREST_TOKEN: ${{ secrets.PINTEREST_TOKEN }}
+          PINTEREST_BOARD_ID: ${{ secrets.PINTEREST_BOARD_ID }}
+          AMAZON_AFFILIATE_ID: ${{ secrets.AMAZON_AFFILIATE_ID }}
+        run: python main.py
